@@ -22,6 +22,7 @@ interface Business {
   verified: boolean;
   relevanceScore?: number;
   similarityScore?: number;
+  createdAt: string;
 }
 
 interface UserPreferences {
@@ -70,7 +71,8 @@ const businesses: Business[] = [
     image: '/images/businesses/elite-performance.jpg',
     connectionCount: 1250,
     rating: 4.8,
-    verified: true
+    verified: true,
+    createdAt: '2024-01-15'
   },
   {
     id: '2',
@@ -82,7 +84,8 @@ const businesses: Business[] = [
     image: '/images/businesses/physioflex.jpg',
     connectionCount: 890,
     rating: 4.9,
-    verified: true
+    verified: true,
+    createdAt: '2024-02-01'
   },
   {
     id: '3',
@@ -94,7 +97,8 @@ const businesses: Business[] = [
     image: 'https://placehold.co/600x400/333/FFF?text=Mindful+Wellness',
     connectionCount: 750,
     rating: 4.7,
-    verified: true
+    verified: true,
+    createdAt: '2024-01-20'
   },
   {
     id: '4',
@@ -106,7 +110,8 @@ const businesses: Business[] = [
     image: 'https://placehold.co/600x400/333/FFF?text=NutriPeak',
     connectionCount: 980,
     rating: 4.6,
-    verified: true
+    verified: true,
+    createdAt: '2024-02-10'
   },
   {
     id: '5',
@@ -118,7 +123,8 @@ const businesses: Business[] = [
     image: 'https://placehold.co/600x400/333/FFF?text=Core+Power',
     connectionCount: 1100,
     rating: 4.8,
-    verified: true
+    verified: true,
+    createdAt: '2024-01-25'
   },
   {
     id: '6',
@@ -130,7 +136,8 @@ const businesses: Business[] = [
     image: 'https://placehold.co/600x400/333/FFF?text=CrossFit+Revolution',
     connectionCount: 1500,
     rating: 4.9,
-    verified: true
+    verified: true,
+    createdAt: '2024-02-05'
   },
   {
     id: '7',
@@ -142,7 +149,8 @@ const businesses: Business[] = [
     image: 'https://placehold.co/600x400/333/FFF?text=Recovery+Zone',
     connectionCount: 680,
     rating: 4.7,
-    verified: true
+    verified: true,
+    createdAt: '2024-01-30'
   },
   {
     id: '8',
@@ -154,7 +162,8 @@ const businesses: Business[] = [
     image: 'https://placehold.co/600x400/333/FFF?text=Sports+Medicine',
     connectionCount: 920,
     rating: 4.8,
-    verified: true
+    verified: true,
+    createdAt: '2024-02-15'
   }
 ];
 
@@ -200,7 +209,7 @@ export default function DirectoryPage() {
         case 'connections':
           return b.connectionCount - a.connectionCount;
         case 'newest':
-          return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         default:
           return (b.relevanceScore || 0) - (a.relevanceScore || 0);
       }
