@@ -2,31 +2,48 @@
 /node_modules
 /.pnp
 .pnp.js
+/jspm_packages
 
 # testing
 /coverage
+*.lcov
+.nyc_output
 
 # next.js
 /.next/
 /out/
+.next
+out
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
 *.pem
+.env
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
 
-# local env files
-.env*.local
-
-# vercel
-.vercel
+# cache
+.cache
+.parcel-cache
+.npm
+.eslintcache
+.stylelintcache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
 
 # typescript
 *.tsbuildinfo
@@ -34,4 +51,34 @@ next-env.d.ts
 
 # IDE
 .idea
-.vscode 
+.vscode
+.vscode-test
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Other
+logs
+*.log
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+pids
+*.pid
+*.seed
+*.pid.lock
+lib-cov
+.grunt
+bower_components
+.lock-wscript
+build/Release
+web_modules/
+.node_repl_history
+*.tgz
+.yarn-integrity
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
