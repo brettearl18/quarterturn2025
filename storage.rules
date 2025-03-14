@@ -1,0 +1,38 @@
+rules_version = '2';
+
+// Craft rules based on data in your Firestore database
+// allow write: if firestore.get(
+//    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isVendor() {
+      return isAuthenticated() && 
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'vendor';
+    }
+
+    // Product images
+    match /products/{productId}/{imageFile} {
+      allow read: if true;
+      allow create: if isVendor();
+      allow update, delete: if isVendor() &&
+        firestore.get(/databases/(default)/documents/products/$(productId)).data.vendorId == request.auth.uid;
+    }
+
+    // User profile images
+    match /users/{userId}/{imageFile} {
+      allow read: if true;
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Vendor profile images
+    match /vendors/{vendorId}/{imageFile} {
+      allow read: if true;
+      allow write: if isAuthenticated() && request.auth.uid == vendorId;
+    }
+  }
+}

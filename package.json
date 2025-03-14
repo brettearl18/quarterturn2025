@@ -1,0 +1,41 @@
+{
+  "name": "quarter-turn-marketplace",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@firebase/app": "^0.11.2",
+    "@firebase/auth": "^1.9.1",
+    "@firebase/firestore": "^4.7.9",
+    "@firebase/storage": "^0.13.7",
+    "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
+    "@googlemaps/js-api-loader": "^1.16.8",
+    "@heroicons/react": "^2.2.0",
+    "@stripe/stripe-js": "^2.4.0",
+    "@types/google.maps": "^3.58.1",
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "autoprefixer": "^10.4.0",
+    "axios": "^1.6.0",
+    "firebase": "^11.4.0",
+    "framer-motion": "^12.5.0",
+    "next": "14.1.0",
+    "postcss": "^8.4.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "14.1.0"
+  }
+}
