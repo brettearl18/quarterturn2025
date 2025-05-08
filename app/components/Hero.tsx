@@ -31,7 +31,7 @@ export default function Hero() {
                 Premium fitness equipment, expert guidance, and
                 everything you need to build your strength journey.
               </p>
-              <div className="flex gap-6">
+              <div className="flex gap-6 flex-wrap">
                 <Link 
                   href="/products"
                   className="bg-primary text-white px-8 py-4 rounded-full font-semibold hover:bg-primary-dark transition-colors"
@@ -43,6 +43,12 @@ export default function Hero() {
                   className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-primary hover:text-white transition-colors"
                 >
                   View Services
+                </Link>
+                <Link
+                  href="/find-a-coach"
+                  className="bg-yellow-400 text-black px-8 py-4 rounded-full font-bold shadow hover:bg-yellow-300 transition-colors border-2 border-yellow-500 animate-pulse"
+                >
+                  Online Directory
                 </Link>
               </div>
             </div>

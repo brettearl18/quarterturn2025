@@ -44,6 +44,12 @@ export default function Navigation() {
             <Link href="/products" className="text-gray-300 hover:text-yellow-400 transition-colors">
               Products
             </Link>
+            <Link
+              href="/find-a-coach"
+              className="bg-yellow-400 text-black px-4 py-2 rounded-lg font-bold shadow hover:bg-yellow-300 transition-colors border-2 border-yellow-500 animate-pulse"
+            >
+              Online Coach
+            </Link>
             <Link href="/about" className="text-gray-300 hover:text-yellow-400 transition-colors">
               About
             </Link>
@@ -122,6 +128,12 @@ export default function Navigation() {
               className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
             >
               Products
+            </Link>
+            <Link
+              href="/find-a-coach"
+              className="block w-full px-3 py-2 mt-2 text-center bg-yellow-400 text-black rounded-lg font-bold shadow hover:bg-yellow-300 transition-colors border-2 border-yellow-500 animate-pulse"
+            >
+              Online Coach
             </Link>
             <Link
               href="/about"
