@@ -1,344 +1,335 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { 
+  StarIcon,
+  HeartIcon,
+  ShareIcon,
+  ShoppingCartIcon,
+  TruckIcon,
+  ShieldCheckIcon,
+  ArrowPathIcon
+} from '@heroicons/react/24/outline';
+import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 
-interface Product {
+interface ProductDetails {
   id: string;
   name: string;
-  category: string;
-  price: number;
   description: string;
+  price: number;
+  originalPrice?: number;
+  category: string;
+  rating: number;
+  reviews: number;
+  inStock: boolean;
+  featured: boolean;
+  image: string;
+  tags: string[];
   features: string[];
-  specs: { [key: string]: string };
-  stock: number;
-  images: string[];
-  rating: number;
-  reviews: Review[];
+  specifications: Record<string, string>;
+  relatedProducts: string[];
 }
 
-interface Review {
-  id: string;
-  userName: string;
-  rating: number;
-  date: string;
-  comment: string;
-  verified: boolean;
-}
-
-const product: Product = {
-  id: '1',
-  name: 'Premium Barbell Set',
-  category: 'Weight Training',
+// This would typically come from an API or database
+const product: ProductDetails = {
+  id: 'adjustable-dumbbell-set',
+  name: 'Adjustable Dumbbell Set',
+  description: 'Space-saving adjustable dumbbells with quick weight change mechanism. Perfect for home gyms and versatile workouts. Features a durable construction and easy-to-use weight selection system.',
   price: 299.99,
-  description: 'Professional grade Olympic barbell with weight plates. Perfect for serious lifters and commercial gyms. Features precision knurling, smooth spin, and high weight capacity.',
-  features: [
-    'Olympic standard 20kg barbell',
-    'Precision knurling for optimal grip',
-    'High-grade steel construction',
-    'Smooth bearing rotation',
-    'Chrome finish for durability',
-    'Includes spring collars'
-  ],
-  specs: {
-    'Weight': '20kg (bar only)',
-    'Length': '2.2m',
-    'Shaft Diameter': '28mm',
-    'Weight Capacity': '680kg',
-    'Finish': 'Chrome',
-    'Warranty': '5 years'
-  },
-  stock: 15,
-  images: [
-    '/images/products/barbell-1.jpg',
-    '/images/products/barbell-2.jpg',
-    '/images/products/barbell-3.jpg',
-    '/images/products/barbell-4.jpg'
-  ],
+  originalPrice: 399.99,
+  category: 'Gym Equipment',
   rating: 4.8,
-  reviews: [
-    {
-      id: '1',
-      userName: 'John D.',
-      rating: 5,
-      date: '2024-02-15',
-      comment: 'Excellent quality barbell. The knurling is perfect and the spin is smooth.',
-      verified: true
-    },
-    {
-      id: '2',
-      userName: 'Sarah M.',
-      rating: 4,
-      date: '2024-02-10',
-      comment: 'Great product, but a bit pricey. The quality is worth it though.',
-      verified: true
-    }
-  ]
+  reviews: 256,
+  inStock: true,
+  featured: true,
+  image: '/images/products/dumbbells.jpg',
+  tags: ['strength', 'home gym', 'adjustable'],
+  features: [
+    'Quick-change weight selection system',
+    'Space-saving design',
+    'Durable construction',
+    'Weight range: 5-52.5 lbs per dumbbell',
+    'Ergonomic handle design'
+  ],
+  specifications: {
+    'Weight Range': '5-52.5 lbs per dumbbell',
+    'Increment': '2.5 lbs',
+    'Material': 'Steel with rubber coating',
+    'Handle': 'Knurled steel',
+    'Dimensions': '16.9" x 8.3" x 9.5"',
+    'Weight': '52.5 lbs each'
+  },
+  relatedProducts: ['premium-yoga-mat', 'resistance-bands-set']
 };
 
-const recommendedProducts = [
-  {
-    id: '2',
-    name: 'Adjustable Dumbbell Set',
-    category: 'Weight Training',
-    price: 199.99,
-    description: 'Space-saving adjustable dumbbells from 5-50 lbs'
-  },
-  {
-    id: '3',
-    name: 'Competition Kettlebell',
-    category: 'Functional Training',
-    price: 89.99,
-    description: 'Professional grade kettlebell for dynamic workouts'
-  },
-  {
-    id: '4',
-    name: 'Power Rack',
-    category: 'Weight Training',
-    price: 599.99,
-    description: 'Heavy-duty power rack for safe weight training'
-  }
-];
-
-export default function ProductPage() {
-  const [selectedTab, setSelectedTab] = useState<'description' | 'specs' | 'reviews'>('description');
-  const [quantity, setQuantity] = useState(1);
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [isAddedToCart, setIsAddedToCart] = useState(false);
+export default function ProductPage({ params }: { params: { id: string } }) {
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [showReviews, setShowReviews] = useState(false);
+  const [activeTab, setActiveTab] = useState<'description' | 'specs' | 'reviews'>('description');
 
   const handleAddToCart = () => {
-    setIsAddedToCart(true);
-    setTimeout(() => setIsAddedToCart(false), 2000);
-    // Here you would typically call your cart management function
+    // Implement cart functionality
+    console.log('Adding to cart:', {
+      product: product.id,
+      quantity: selectedQuantity
+    });
   };
 
-  const StarRating = ({ rating }: { rating: number }) => (
-    <div className="flex items-center">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <svg
-          key={star}
-          className={`w-4 h-4 ${
-            star <= rating ? 'text-yellow-400' : 'text-gray-300'
-          }`}
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-        </svg>
-      ))}
-      <span className="ml-2 text-sm text-gray-600">({product.reviews.length} reviews)</span>
-    </div>
-  );
-
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Breadcrumb */}
-      <div className="bg-gray-50 py-4">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center space-x-2 text-sm">
-            <Link href="/" className="text-gray-600 hover:text-gray-900">Home</Link>
-            <span className="text-gray-400">/</span>
-            <Link href="/products" className="text-gray-600 hover:text-gray-900">Products</Link>
-            <span className="text-gray-400">/</span>
-            <span className="text-gray-900">{product.name}</span>
-          </div>
-        </div>
+      <div className="container mx-auto px-4 py-4">
+        <nav className="text-sm">
+          <Link href="/products" className="text-gray-500 hover:text-[#4AC1E0]">
+            Products
+          </Link>
+          <span className="mx-2 text-gray-400">/</span>
+          <span className="text-[#4AC1E0]">{product.name}</span>
+        </nav>
       </div>
 
-      {/* Product Section */}
-      <div className="container mx-auto px-4 py-12">
+      {/* Product Details */}
+      <section className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Product Images */}
-          <div className="space-y-4">
-            <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-              <motion.div 
-                className="h-full flex items-center justify-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className={`w-full h-full relative ${
-                  selectedImage === 0 ? 'bg-blue-100' :
-                  selectedImage === 1 ? 'bg-green-100' :
-                  selectedImage === 2 ? 'bg-yellow-100' :
-                  'bg-red-100'
-                }`}>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                    <div className={`w-32 h-32 rounded-full mb-4 ${
-                      selectedImage === 0 ? 'bg-blue-500' :
-                      selectedImage === 1 ? 'bg-green-500' :
-                      selectedImage === 2 ? 'bg-yellow-500' :
-                      'bg-red-500'
-                    }`}></div>
-                    <span className="text-gray-600 font-medium">Premium Barbell Set</span>
-                    <span className="text-sm text-gray-500 mt-2">View {selectedImage + 1}</span>
-                  </div>
-                </div>
-              </motion.div>
+          {/* Product Image */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="aspect-square relative bg-gradient-to-br from-[#4AC1E0] via-[#E0DF00]/30 to-[#4AC1E0] rounded-2xl overflow-hidden"
+          >
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-64 h-64 rounded-full bg-white/20 backdrop-blur-sm"></div>
             </div>
-            <div className="grid grid-cols-4 gap-4">
-              {[0, 1, 2, 3].map((index) => (
-                <button
+            {product.featured && (
+              <div className="absolute top-4 left-4 bg-[#4AC1E0] text-white px-3 py-1 rounded-full text-sm">
+                Featured
+              </div>
+            )}
+          </motion.div>
+
+          {/* Product Info */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex flex-col"
+          >
+            <h1 className="text-4xl font-bold text-gray-800 mb-4">{product.name}</h1>
+            
+            <div className="flex items-center gap-4 mb-6">
+              <div className="flex items-center gap-1">
+                <StarIcon className="w-5 h-5 text-yellow-400" />
+                <span className="text-gray-600">{product.rating}</span>
+                <span className="text-gray-400">({product.reviews} reviews)</span>
+              </div>
+              <button
+                onClick={() => setShowReviews(!showReviews)}
+                className="text-[#4AC1E0] hover:underline"
+              >
+                Read Reviews
+              </button>
+            </div>
+
+            <p className="text-gray-600 mb-8">{product.description}</p>
+
+            <div className="mb-8">
+              <span className="text-3xl font-bold text-[#4AC1E0]">${product.price}</span>
+              {product.originalPrice && (
+                <span className="ml-3 text-lg text-gray-400 line-through">
+                  ${product.originalPrice}
+                </span>
+              )}
+            </div>
+
+            <div className="flex gap-4 mb-8">
+              <select
+                value={selectedQuantity}
+                onChange={(e) => setSelectedQuantity(Number(e.target.value))}
+                className="px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#4AC1E0]"
+              >
+                {[1, 2, 3, 4, 5].map(num => (
+                  <option key={num} value={num}>{num}</option>
+                ))}
+              </select>
+              <button
+                onClick={handleAddToCart}
+                className="flex-1 flex items-center justify-center gap-2 bg-[#4AC1E0] text-white px-6 py-2 rounded-lg hover:bg-[#4AC1E0]/90 transition-colors"
+              >
+                <ShoppingCartIcon className="w-5 h-5" />
+                Add to Cart
+              </button>
+              <button className="p-2 rounded-lg border border-gray-200 hover:border-[#4AC1E0] transition-colors">
+                <HeartIcon className="w-6 h-6 text-gray-600" />
+              </button>
+              <button className="p-2 rounded-lg border border-gray-200 hover:border-[#4AC1E0] transition-colors">
+                <ShareIcon className="w-6 h-6 text-gray-600" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <div className="flex items-center gap-3 p-4 rounded-lg bg-white shadow-sm">
+                <TruckIcon className="w-6 h-6 text-[#4AC1E0]" />
+                <div>
+                  <h4 className="font-semibold">Free Shipping</h4>
+                  <p className="text-sm text-gray-500">On orders over $100</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-4 rounded-lg bg-white shadow-sm">
+                <ShieldCheckIcon className="w-6 h-6 text-[#4AC1E0]" />
+                <div>
+                  <h4 className="font-semibold">2 Year Warranty</h4>
+                  <p className="text-sm text-gray-500">Full coverage</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-4 rounded-lg bg-white shadow-sm">
+                <ArrowPathIcon className="w-6 h-6 text-[#4AC1E0]" />
+                <div>
+                  <h4 className="font-semibold">30 Day Returns</h4>
+                  <p className="text-sm text-gray-500">Money back guarantee</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Features and Specifications */}
+      <section className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Features */}
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">Features</h2>
+            <ul className="space-y-4">
+              {product.features.map((feature, index) => (
+                <motion.li
                   key={index}
-                  onClick={() => setSelectedImage(index)}
-                  className={`aspect-square rounded-md overflow-hidden transition-all ${
-                    selectedImage === index ? 'ring-2 ring-blue-500 scale-95' : 'hover:scale-105'
-                  }`}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex items-center gap-3"
                 >
-                  <div className={`h-full w-full ${
-                    index === 0 ? 'bg-blue-100' :
-                    index === 1 ? 'bg-green-100' :
-                    index === 2 ? 'bg-yellow-100' :
-                    'bg-red-100'
-                  } flex items-center justify-center`}>
-                    <div className={`w-8 h-8 rounded-full ${
-                      index === 0 ? 'bg-blue-500' :
-                      index === 1 ? 'bg-green-500' :
-                      index === 2 ? 'bg-yellow-500' :
-                      'bg-red-500'
-                    }`}></div>
-                  </div>
-                </button>
+                  <div className="w-2 h-2 rounded-full bg-[#4AC1E0]" />
+                  <span className="text-gray-600">{feature}</span>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Specifications */}
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">Specifications</h2>
+            <div className="space-y-4">
+              {Object.entries(product.specifications).map(([key, value], index) => (
+                <motion.div
+                  key={key}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex justify-between py-2 border-b border-gray-200"
+                >
+                  <span className="text-gray-600">{key}</span>
+                  <span className="font-medium text-gray-800">{value}</span>
+                </motion.div>
               ))}
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Product Info */}
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
-            <StarRating rating={product.rating} />
-            <div className="flex items-center space-x-4 mt-4 mb-6">
-              <span className="text-3xl font-bold text-gray-900">${product.price}</span>
-              <span className={`px-3 py-1 rounded-full text-sm ${
-                product.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-              }`}>
-                {product.stock > 0 ? `In stock (${product.stock} available)` : 'Out of stock'}
-              </span>
-            </div>
-            
-            {/* Quantity Selector */}
-            <div className="flex items-center space-x-4 mb-6">
-              <label className="text-gray-700">Quantity:</label>
-              <div className="flex items-center border rounded-lg">
-                <button 
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="px-4 py-2 border-r hover:bg-gray-50 transition-colors"
-                >
-                  -
-                </button>
-                <span className="px-6 py-2">{quantity}</span>
-                <button 
-                  onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                  className="px-4 py-2 border-l hover:bg-gray-50 transition-colors"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            {/* Add to Cart Button */}
-            <motion.button
-              onClick={handleAddToCart}
-              className={`w-full py-4 rounded-full font-medium transition-colors mb-8 ${
-                isAddedToCart
-                  ? 'bg-green-600 hover:bg-green-700'
-                  : 'bg-blue-600 hover:bg-blue-700'
-              } text-white`}
-              whileTap={{ scale: 0.95 }}
+      {/* Product Details Tabs */}
+      <div className="border-t">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex gap-8 border-b mb-8">
+            <button
+              onClick={() => setActiveTab('description')}
+              className={`pb-4 font-medium ${
+                activeTab === 'description'
+                  ? 'border-b-2 border-[#4AC1E0] text-gray-900'
+                  : 'text-gray-500'
+              }`}
             >
-              {isAddedToCart ? 'Added to Cart!' : 'Add to Cart'}
-            </motion.button>
+              Description
+            </button>
+            <button
+              onClick={() => setActiveTab('specs')}
+              className={`pb-4 font-medium ${
+                activeTab === 'specs'
+                  ? 'border-b-2 border-[#4AC1E0] text-gray-900'
+                  : 'text-gray-500'
+              }`}
+            >
+              Specifications
+            </button>
+            <button
+              onClick={() => setActiveTab('reviews')}
+              className={`pb-4 font-medium ${
+                activeTab === 'reviews'
+                  ? 'border-b-2 border-[#4AC1E0] text-gray-900'
+                  : 'text-gray-500'
+              }`}
+            >
+              Reviews ({product.reviews})
+            </button>
+          </div>
 
-            {/* Tabs */}
-            <div className="border-b mb-6">
-              <div className="flex space-x-8">
-                {['description', 'specs', 'reviews'].map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setSelectedTab(tab as typeof selectedTab)}
-                    className={`pb-4 font-medium capitalize ${
-                      selectedTab === tab
-                        ? 'border-b-2 border-blue-600 text-blue-600'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    {tab}
-                  </button>
+          {/* Tab Content */}
+          <div className="max-w-3xl">
+            {activeTab === 'description' && (
+              <div className="prose text-gray-600">
+                <p>{product.description}</p>
+              </div>
+            )}
+
+            {activeTab === 'specs' && (
+              <div className="grid grid-cols-2 gap-4">
+                {Object.entries(product.specifications).map(([key, value]) => (
+                  <div key={key} className="border-b pb-4">
+                    <div className="text-sm text-gray-500 mb-1">{key}</div>
+                    <div className="font-medium text-gray-800">{value}</div>
+                  </div>
                 ))}
               </div>
-            </div>
+            )}
 
-            {/* Tab Content */}
-            <div className="space-y-6">
-              {selectedTab === 'description' && (
-                <div>
-                  <p className="text-gray-600 mb-6">{product.description}</p>
-                  <h3 className="font-medium text-gray-900 mb-4">Key Features</h3>
-                  <ul className="list-disc list-inside space-y-2 text-gray-600">
-                    {product.features.map((feature, index) => (
-                      <li key={index}>{feature}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {selectedTab === 'specs' && (
-                <div className="grid grid-cols-2 gap-4">
-                  {Object.entries(product.specs).map(([key, value]) => (
-                    <div key={key} className="border-b pb-4">
-                      <dt className="font-medium text-gray-900">{key}</dt>
-                      <dd className="text-gray-600 mt-1">{value}</dd>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {selectedTab === 'reviews' && (
-                <div className="space-y-8">
-                  {product.reviews.map((review) => (
-                    <div key={review.id} className="border-b pb-6">
-                      <div className="flex items-center justify-between mb-2">
-                        <div>
-                          <span className="font-medium text-gray-900">{review.userName}</span>
-                          {review.verified && (
-                            <span className="ml-2 text-xs text-green-600">Verified Purchase</span>
-                          )}
-                        </div>
-                        <span className="text-sm text-gray-500">{review.date}</span>
-                      </div>
-                      <StarRating rating={review.rating} />
-                      <p className="mt-2 text-gray-600">{review.comment}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            {activeTab === 'reviews' && (
+              <div className="text-center py-8">
+                <p className="text-gray-600">Reviews coming soon!</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Recommended Products */}
-      <div className="bg-gray-50 py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Recommended Products</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {recommendedProducts.map((product) => (
-              <Link
-                key={product.id}
-                href={`/products/${product.id}`}
-                className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-              >
-                <div className="aspect-square bg-gray-100 relative">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-2/3 h-2/3 bg-gray-200 rounded-lg"></div>
+      {/* Related Products */}
+      <div className="bg-gray-50">
+        <div className="container mx-auto px-4 py-12">
+          <h2 className="text-2xl font-bold mb-8">Related Products</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {product.relatedProducts.map((relatedProductId) => (
+              <Link key={relatedProductId} href={`/products/${relatedProductId}`}>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white rounded-lg shadow-sm overflow-hidden"
+                >
+                  <div className="aspect-square relative bg-gradient-to-br from-[#4AC1E0] via-[#E0DF00]/30 to-[#4AC1E0] overflow-hidden">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-32 h-32 rounded-full bg-white/20 backdrop-blur-sm"></div>
+                    </div>
                   </div>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-medium text-gray-900 mb-1">{product.name}</h3>
-                  <p className="text-sm text-gray-500 mb-2">{product.category}</p>
-                  <span className="font-medium text-gray-900">${product.price}</span>
-                </div>
+                  <div className="p-4">
+                    <h3 className="font-medium mb-2">{relatedProductId.split('-').join(' ').toUpperCase()}</h3>
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-[#4AC1E0]">View Details</span>
+                      <div className="flex items-center">
+                        <StarIconSolid className="h-5 w-5 text-yellow-400" />
+                        <span className="ml-1">4.8</span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
               </Link>
             ))}
           </div>

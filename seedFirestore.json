@@ -1,0 +1,79 @@
+{
+  "products": [
+    {
+      "name": "Adjustable Dumbbells",
+      "vendorId": "vendor_001",
+      "price": 199.99,
+      "categoryId": "strength",
+      "images": ["https://example.com/dumbbell.jpg"],
+      "stock": 10,
+      "tags": ["dumbbell", "adjustable", "strength"],
+      "createdAt": "2024-05-01T12:00:00Z",
+      "rating": 4.8,
+      "numReviews": 5,
+      "specs": { "weightRange": "5-50 lbs" }
+    },
+    {
+      "name": "Yoga Mat",
+      "vendorId": "vendor_002",
+      "price": 29.99,
+      "categoryId": "yoga",
+      "images": ["https://example.com/yogamat.jpg"],
+      "stock": 50,
+      "tags": ["yoga", "mat", "flexibility"],
+      "createdAt": "2024-05-01T12:00:00Z",
+      "rating": 4.5,
+      "numReviews": 12,
+      "specs": { "material": "Eco-friendly TPE" }
+    }
+  ],
+  "categories": [
+    {
+      "name": "Strength Equipment",
+      "icon": "💪",
+      "description": "Weights, racks, benches, and more."
+    },
+    {
+      "name": "Yoga & Pilates",
+      "icon": "🧘",
+      "description": "Mats, blocks, straps, and accessories."
+    }
+  ],
+  "professionals": [
+    {
+      "userId": "user_abc123",
+      "fullName": "Dr. John Smith",
+      "specialties": ["physiotherapy", "rehabilitation"],
+      "modalities": ["in-person", "online"],
+      "bio": "Experienced physio with 10+ years in sports rehab.",
+      "isVerified": true,
+      "status": "active"
+    }
+  ],
+  "users": [
+    {
+      "email": "jane.doe@example.com",
+      "displayName": "Jane Doe",
+      "role": "client",
+      "createdAt": "2024-05-01T12:00:00Z"
+    }
+  ],
+  "reviews": [
+    {
+      "professionalId": "pro_abc123",
+      "userId": "user_xyz789",
+      "rating": 5,
+      "comment": "Amazing results after just a few sessions!",
+      "createdAt": "2024-05-10T09:00:00Z"
+    }
+  ],
+  "bookings": [
+    {
+      "professionalId": "pro_abc123",
+      "userId": "user_xyz789",
+      "serviceType": "Initial Consultation",
+      "dateTime": "2024-05-15T10:00:00Z",
+      "status": "confirmed"
+    }
+  ]
+} 

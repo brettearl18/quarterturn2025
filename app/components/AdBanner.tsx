@@ -1,41 +1,44 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
-interface AdBannerProps {
-  title: string;
-  description: string;
-  ctaText: string;
-  ctaLink: string;
-  imageSrc: string;
-}
-
-export default function AdBanner({ title, description, ctaText, ctaLink, imageSrc }: AdBannerProps) {
+export default function AdBanner() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg overflow-hidden shadow-lg"
-    >
-      <div className="flex flex-col md:flex-row items-center p-6 md:p-8">
-        <div className="flex-1 text-white mb-6 md:mb-0 md:mr-8">
-          <h3 className="text-2xl font-bold mb-2">{title}</h3>
-          <p className="text-white/90 mb-4">{description}</p>
-          <a
-            href={ctaLink}
-            className="inline-block bg-white text-blue-600 px-6 py-2 rounded-full font-semibold hover:bg-blue-50 transition-colors"
-          >
-            {ctaText}
-          </a>
-        </div>
-        <div className="w-full md:w-1/3">
-          <img
-            src={imageSrc}
-            alt="Promotional content"
-            className="w-full h-48 object-cover rounded-lg"
-          />
-        </div>
+    <div className="bg-gradient-to-r from-blue-600 to-blue-800">
+      <div className="container mx-auto">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between px-4 py-6"
+        >
+          <div className="flex items-center space-x-8">
+            <div className="flex items-center">
+              <span className="text-yellow-400 text-4xl font-bold">20%</span>
+              <span className="text-white text-lg ml-2">OFF</span>
+            </div>
+            <div className="text-white">
+              <h3 className="text-xl font-semibold">New Year Special Offer</h3>
+              <p className="text-white/80">On all premium fitness equipment</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center space-x-6">
+            <div className="text-white text-right">
+              <p className="text-sm text-white/80">Limited time offer</p>
+              <p className="font-semibold">Use code: <span className="text-yellow-400">FIT2024</span></p>
+            </div>
+            <Link 
+              href="/products"
+              className="flex items-center gap-2 bg-white text-blue-600 px-6 py-2 rounded-full font-semibold hover:bg-yellow-400 hover:text-black transition-all"
+            >
+              Shop Now
+              <ArrowRightIcon className="h-4 w-4" />
+            </Link>
+          </div>
+        </motion.div>
       </div>
-    </motion.div>
+    </div>
   );
 } 

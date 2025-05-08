@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-ticker {
+  animation: ticker 30s linear infinite;
+}
+
+/* Pause animation on hover */
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
+
 :root {
   --foreground-rgb: 26, 26, 26;
   --background-rgb: 245, 247, 250;

@@ -39,10 +39,19 @@ export default function BusinessMap({ businesses, onSelectBusiness, selectedBusi
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
   const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(null);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    console.log('Google Maps API Key:', apiKey ? 'Present' : 'Missing');
+    
+    if (!apiKey) {
+      setError('Google Maps API key is missing');
+      return;
+    }
+
     const loader = new Loader({
-      apiKey: 'AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg', // Temporary API key for development
+      apiKey,
       version: 'weekly',
     });
 
@@ -63,6 +72,9 @@ export default function BusinessMap({ businesses, onSelectBusiness, selectedBusi
         setMap(mapInstance);
         setInfoWindow(new google.maps.InfoWindow());
       }
+    }).catch((err) => {
+      setError('Failed to load Google Maps');
+      console.error('Google Maps load error:', err);
     });
   }, []);
 
@@ -111,6 +123,14 @@ export default function BusinessMap({ businesses, onSelectBusiness, selectedBusi
 
     setMarkers(newMarkers);
   }, [map, businesses, infoWindow, selectedBusinessId, onSelectBusiness]);
+
+  if (error) {
+    return (
+      <div className="w-full h-[600px] rounded-lg shadow-lg bg-gray-100 flex items-center justify-center">
+        <p className="text-red-600">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div ref={mapRef} className="w-full h-[600px] rounded-lg shadow-lg" />

@@ -1,72 +1,57 @@
-import Header from './components/Header';
 import Hero from './components/Hero';
+import FlashSale from './components/FlashSale';
+import Features from './components/Features';
 import CategoryGrid from './components/CategoryGrid';
 import FeaturedProducts from './components/FeaturedProducts';
-import Footer from './components/Footer';
+import FeaturedServices from './components/FeaturedServices';
+import TopSelectedProducts from './components/TopSelectedProducts';
+import BusinessInsights from './components/BusinessInsights';
+import NewsTickerBanner from './components/NewsTickerBanner';
+import FirebaseTest from './components/FirebaseTest';
 
 export default function Home() {
   return (
-    <>
-      <Header />
+    <div className="min-h-screen">
+      <NewsTickerBanner />
       <main>
         <Hero />
-        
-        <div className="container mx-auto px-4 py-16">
-          <CategoryGrid />
-          <FeaturedProducts />
+        <div className="space-y-24 py-24">
+          <div className="max-w-7xl mx-auto px-4 md:px-8">
+            <FirebaseTest />
+            <FlashSale />
+          </div>
           
-          {/* Seasonal Sale Banner */}
-          <section className="relative h-[300px] mb-16 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-800">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-32 h-32 bg-red-500 rounded-full opacity-75"></div>
-              </div>
-              <div className="container mx-auto px-4 h-full flex items-center">
-                <div className="text-white">
-                  <h2 className="text-4xl font-bold mb-4">SEASONAL SALE</h2>
-                  <p className="text-2xl mb-6">UP TO 50% OFF</p>
-                  <p className="text-lg mb-8">YOUR FAVORITE BRANDS TODAY AT UNBEATABLE PRICES</p>
-                  <button className="bg-yellow-400 text-black px-8 py-3 rounded-full font-semibold hover:bg-yellow-300 transition-colors">
-                    Shop Now
-                  </button>
-                </div>
-              </div>
+          <div className="bg-gray-50 py-24">
+            <div className="max-w-7xl mx-auto px-4 md:px-8">
+              <Features />
             </div>
-          </section>
+          </div>
 
-          {/* Services Section */}
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold mb-8">OUR SERVICES</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
-              {['Quality', 'Support', 'Delivery', 'Returns', 'Warranty'].map((service) => (
-                <div key={service} className="text-center">
-                  <div className="bg-yellow-400 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                    <div className="w-8 h-8 bg-black rounded"></div>
-                  </div>
-                  <p className="font-semibold">{service}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+          <div className="max-w-7xl mx-auto px-4 md:px-8">
+            <CategoryGrid />
+          </div>
 
-          {/* Featured Brands */}
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold mb-8">FEATURED BRANDS</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {['Brand 1', 'Brand 2', 'Brand 3', 'Brand 4'].map((brand) => (
-                <div key={brand} className="bg-gray-900 aspect-square relative rounded-lg overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-20 h-20 bg-white rounded-lg flex items-center justify-center">
-                      <span className="text-gray-900 font-bold">{brand}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
+          <div className="bg-gray-50 py-24">
+            <div className="max-w-7xl mx-auto px-4 md:px-8">
+              <FeaturedProducts />
             </div>
-          </section>
+          </div>
+
+          <div className="max-w-7xl mx-auto px-4 md:px-8">
+            <FeaturedServices />
+          </div>
+
+          <div className="bg-gray-50 py-24">
+            <div className="max-w-7xl mx-auto px-4 md:px-8">
+              <TopSelectedProducts />
+            </div>
+          </div>
+
+          <div className="max-w-7xl mx-auto px-4 md:px-8">
+            <BusinessInsights />
+          </div>
         </div>
       </main>
-      <Footer />
-    </>
+    </div>
   );
 } 

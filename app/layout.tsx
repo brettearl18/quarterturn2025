@@ -1,10 +1,16 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import ClientLayout from './components/ClientLayout'
+import { Inter } from 'next/font/google'
+import Header from './components/Header'
+import ClientWrapper from './components/ClientWrapper'
+import Navigation from './components/Navigation'
+import Footer from './components/Footer'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Quarter Turn Marketplace',
-  description: 'The premier marketplace for Australian fitness products and services',
+  title: 'Quarter Turn - Fitness Equipment & Services',
+  description: 'Premium fitness equipment, personal training, and wellness services.',
 }
 
 export default function RootLayout({
@@ -14,10 +20,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <ClientLayout>
+      <body className={inter.className}>
+        <Navigation />
+        <main>
           {children}
-        </ClientLayout>
+        </main>
+        <Footer />
+        <ClientWrapper />
       </body>
     </html>
   )

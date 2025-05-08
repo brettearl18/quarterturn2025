@@ -10,7 +10,10 @@ import {
   ClockIcon, 
   MapPinIcon,
   StarIcon,
-  MagnifyingGlassIcon
+  MagnifyingGlassIcon,
+  VideoCameraIcon,
+  BuildingStorefrontIcon,
+  ChartBarIcon
 } from '@heroicons/react/24/outline';
 
 interface ServiceCategory {
@@ -19,50 +22,57 @@ interface ServiceCategory {
   description: string;
   icon: any;
   providers: number;
+  features: string[];
 }
 
 const categories: ServiceCategory[] = [
   {
     id: 'personal-training',
     title: 'Personal Training',
-    description: 'Expert personal trainers providing customized workout plans and one-on-one guidance.',
+    description: 'One-on-one training sessions with certified professionals',
     icon: UserGroupIcon,
-    providers: 150
+    providers: 150,
+    features: ['Custom workout plans', 'Nutrition guidance', 'Progress tracking']
   },
   {
-    id: 'physiotherapy',
-    title: 'Physiotherapy',
-    description: 'Professional physiotherapists helping with injury recovery and movement improvement.',
+    id: 'online-coaching',
+    title: 'Online Coaching',
+    description: 'Remote coaching and support for your fitness journey',
+    icon: VideoCameraIcon,
+    providers: 200,
+    features: ['Video consultations', 'Mobile app support', '24/7 chat access']
+  },
+  {
+    id: 'fitness-classes',
+    title: 'Group Classes',
+    description: 'Energetic group sessions for all fitness levels',
     icon: AcademicCapIcon,
-    providers: 85
+    providers: 80,
+    features: ['Various class types', 'Flexible scheduling', 'Community support']
   },
   {
-    id: 'chiropractic',
-    title: 'Chiropractic Care',
-    description: 'Skilled chiropractors offering spinal adjustments and pain management solutions.',
-    icon: UserGroupIcon,
-    providers: 65
+    id: 'gym-partnerships',
+    title: 'Gym Partnerships',
+    description: 'Access to our network of premium fitness facilities',
+    icon: BuildingStorefrontIcon,
+    providers: 50,
+    features: ['Multiple locations', 'Premium equipment', 'Exclusive rates']
   },
   {
-    id: 'health-coaching',
-    title: 'Health Coaching',
-    description: 'Certified health coaches providing guidance on nutrition, lifestyle, and wellness.',
-    icon: AcademicCapIcon,
-    providers: 95
+    id: 'nutrition-planning',
+    title: 'Nutrition Planning',
+    description: 'Customized meal plans and dietary guidance',
+    icon: ChartBarIcon,
+    providers: 120,
+    features: ['Meal planning', 'Supplement advice', 'Diet tracking']
   },
   {
-    id: 'nutrition',
-    title: 'Nutrition Consulting',
-    description: 'Expert nutritionists offering personalized diet plans and nutritional advice.',
-    icon: UserGroupIcon,
-    providers: 70
-  },
-  {
-    id: 'massage',
-    title: 'Massage Therapy',
-    description: 'Professional massage therapists specializing in various therapeutic techniques.',
-    icon: UserGroupIcon,
-    providers: 110
+    id: 'fitness-assessment',
+    title: 'Fitness Assessment',
+    description: 'Comprehensive evaluation of your fitness level',
+    icon: ClockIcon,
+    providers: 90,
+    features: ['Body composition', 'Performance metrics', 'Goal setting']
   }
 ];
 
@@ -113,61 +123,89 @@ const featuredProviders: FeaturedProvider[] = [
 export default function ServicesPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
+  const filteredCategories = categories.filter(category =>
+    category.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    category.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Hero Section */}
-      <section className="relative bg-black text-white py-20">
-        <div className="absolute inset-0 bg-gradient-to-r from-black to-transparent z-10" />
-        <div className="relative z-20 container mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl font-bold mb-6">Health & Medical Services</h1>
-            <p className="text-xl mb-8">
-              Connect with top health professionals in your area. From personal trainers to physiotherapists,
-              find the perfect expert for your wellness journey.
+      <section className="bg-black text-white py-16">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="max-w-4xl mx-auto text-center"
+          >
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              Professional Fitness Services
+            </h1>
+            <p className="text-xl text-gray-300 mb-8">
+              Expert guidance and support to help you achieve your fitness goals
             </p>
-            
-            {/* Search Bar */}
-            <div className="relative max-w-2xl">
+            <div className="relative max-w-2xl mx-auto">
               <input
                 type="text"
-                placeholder="Search for services or providers..."
+                placeholder="Search services..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-6 py-4 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                className="w-full px-6 py-4 rounded-full bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4AC1E0]"
               />
-              <MagnifyingGlassIcon className="absolute right-4 top-4 h-6 w-6 text-gray-400" />
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Service Categories */}
+      {/* Categories Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-12 text-center">Our Service Categories</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {categories.map((category) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredCategories.map((category) => (
               <motion.div
                 key={category.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+                className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all"
               >
-                <category.icon className="h-12 w-12 text-yellow-500 mb-4" />
-                <h3 className="text-xl font-semibold mb-2">{category.title}</h3>
+                <div className="w-14 h-14 bg-[#4AC1E0] bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
+                  <category.icon className="w-8 h-8 text-[#4AC1E0]" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-gray-800">{category.title}</h3>
                 <p className="text-gray-600 mb-4">{category.description}</p>
-                <div className="flex justify-between items-center">
+                <div className="space-y-3">
+                  {category.features.map((feature, index) => (
+                    <div key={index} className="flex items-center text-sm text-gray-600">
+                      <span className="w-2 h-2 bg-[#4AC1E0] rounded-full mr-2"></span>
+                      {feature}
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6 flex items-center justify-between">
                   <span className="text-sm text-gray-500">{category.providers} Providers</span>
-                  <Link 
-                    href={`/directory?category=${category.id}`}
-                    className="text-yellow-600 hover:text-yellow-700 font-semibold"
-                  >
-                    View All →
-                  </Link>
+                  <button className="px-4 py-2 bg-[#4AC1E0] text-white rounded-lg hover:bg-[#4AC1E0]/90 transition-colors">
+                    Learn More
+                  </button>
                 </div>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 bg-black text-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
+            <p className="text-xl text-gray-300 mb-8">
+              Connect with our fitness professionals and start your journey today
+            </p>
+            <button className="px-8 py-4 bg-[#4AC1E0] text-white rounded-full hover:bg-[#4AC1E0]/90 transition-colors text-lg font-semibold">
+              Schedule a Consultation
+            </button>
           </div>
         </div>
       </section>

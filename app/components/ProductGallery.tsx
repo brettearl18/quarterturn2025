@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
 
 interface Product {
   id: string;
@@ -57,68 +56,37 @@ const products: Product[] = [
 ];
 
 export default function ProductGallery() {
-  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
-
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <div className="bg-gray-50 py-16">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Shop Equipment</h1>
-          <p className="text-lg text-gray-600 max-w-2xl">
-            Discover premium fitness equipment designed for your strength journey. Every piece is carefully selected for quality and performance.
-          </p>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-4 w-full md:w-auto">
-              <button className="px-4 py-2 border rounded-full hover:bg-gray-50 text-sm font-medium">
-                Filter
-              </button>
-              <div className="relative flex-grow md:flex-grow-0">
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  className="w-full px-4 py-2 border rounded-full bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white"
-                />
-              </div>
-            </div>
-            <div className="flex items-center gap-4 w-full md:w-auto">
-              <select className="px-4 py-2 border rounded-full bg-white text-sm font-medium cursor-pointer">
-                <option value="">Category</option>
-                <option value="weight-training">Weight Training</option>
-                <option value="functional-training">Functional Training</option>
-                <option value="accessories">Accessories</option>
-                <option value="recovery">Recovery</option>
-              </select>
-              <select className="px-4 py-2 border rounded-full bg-white text-sm font-medium cursor-pointer">
-                <option value="featured">Featured</option>
-                <option value="price-low-high">Price: Low to High</option>
-                <option value="price-high-low">Price: High to Low</option>
-                <option value="newest">Newest</option>
-              </select>
-            </div>
+    <div className="min-h-screen bg-gray-100 py-12">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">Product Gallery</h1>
+          <div className="flex gap-4">
+            <select className="px-4 py-2 border rounded-lg bg-white">
+              <option value="">All Categories</option>
+              <option value="weight-training">Weight Training</option>
+              <option value="functional-training">Functional Training</option>
+              <option value="accessories">Accessories</option>
+              <option value="recovery">Recovery</option>
+            </select>
+            <select className="px-4 py-2 border rounded-lg bg-white">
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="name-asc">Name: A to Z</option>
+              <option value="name-desc">Name: Z to A</option>
+            </select>
           </div>
         </div>
-      </div>
 
-      {/* Product Grid */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {products.map((product) => (
             <div
               key={product.id}
-              className="group relative"
-              onMouseEnter={() => setHoveredProduct(product.id)}
-              onMouseLeave={() => setHoveredProduct(null)}
+              className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
             >
-              <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4 relative">
+              <div className="aspect-square bg-gradient-to-br from-[#4AC1E0] via-[#E0DF00]/50 to-[#4AC1E0] rounded-lg overflow-hidden mb-4 relative">
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-2/3 h-2/3 bg-gray-200 rounded-lg transition-transform group-hover:scale-110" />
+                  <div className="w-32 h-32 rounded-full bg-white/20 backdrop-blur-sm"></div>
                 </div>
                 {hoveredProduct === product.id && (
                   <div className="absolute inset-x-0 bottom-4 flex justify-center">
@@ -128,29 +96,23 @@ export default function ProductGallery() {
                   </div>
                 )}
               </div>
-              <div>
+              <div className="p-6">
                 <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h3 className="text-base font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
-                      {product.name}
-                    </h3>
-                    <p className="text-sm text-gray-500">{product.category}</p>
-                  </div>
-                  <span className="text-base font-medium text-gray-900">
+                  <h3 className="text-xl font-semibold">{product.name}</h3>
+                  <span className="text-lg font-bold text-blue-600">
                     ${product.price}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 line-clamp-2 mb-4">
-                  {product.description}
-                </p>
-                <div className="flex items-center justify-between">
+                <p className="text-sm text-gray-600 mb-2">{product.category}</p>
+                <p className="text-gray-700 mb-4">{product.description}</p>
+                <div className="flex justify-between items-center">
                   <Link
                     href={`/products/${product.id}`}
-                    className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                    className="text-blue-600 hover:text-blue-800 font-semibold"
                   >
                     View Details
                   </Link>
-                  <button className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition-colors">
+                  <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
                     Add to Cart
                   </button>
                 </div>

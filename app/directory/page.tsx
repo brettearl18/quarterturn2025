@@ -8,6 +8,12 @@ import AdBanner from '../components/AdBanner';
 import TrendingProducts from '../components/TrendingProducts';
 import AISearch from '../components/AISearch';
 import BusinessInsights from '../components/BusinessInsights';
+import SearchWrapper from '../components/SearchWrapper';
+import DirectorySearchBar from './DirectorySearchBar';
+import DirectoryFilters from './DirectoryFilters';
+import DirectoryResultsList from './DirectoryResultsList';
+import { db } from '../lib/firebase';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 interface Business {
   id: string;
@@ -175,217 +181,47 @@ const sortOptions: SortOption[] = [
 ];
 
 export default function DirectoryPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedLocation, setSelectedLocation] = useState('All Locations');
-  const [selectedBusinessId, setSelectedBusinessId] = useState<string | undefined>();
-  const [showMap, setShowMap] = useState(true);
-  const [view, setView] = useState<'grid' | 'list'>('list');
-  const [sortBy, setSortBy] = useState<SortOption['value']>('relevance');
-  const [activeFilters, setActiveFilters] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const [professionals, setProfessionals] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState({ specialty: '', modality: '' });
 
-  // Filter businesses based on all criteria
-  const filteredBusinesses = useMemo(() => {
-    return businesses.filter(business => {
-      const matchesSearch = !searchQuery || 
-        business.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        business.description.toLowerCase().includes(searchQuery.toLowerCase());
-      
-      const matchesCategory = selectedCategory === 'All' || 
-        business.category === selectedCategory;
-      
-      const matchesLocation = selectedLocation === 'All Locations' || 
-        business.location === selectedLocation;
-      
-      const matchesFilters = activeFilters.length === 0 || 
-        activeFilters.some(filter => business.specialties.includes(filter));
+  useEffect(() => {
+    async function fetchProfessionals() {
+      setLoading(true);
+      let q = collection(db, 'professionals');
+      // Example: Add filtering logic here if needed
+      // q = query(q, where('specialties', 'array-contains', filters.specialty));
+      const snapshot = await getDocs(q);
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setProfessionals(data);
+      setLoading(false);
+    }
+    fetchProfessionals();
+  }, [filters]);
 
-      return matchesSearch && matchesCategory && matchesLocation && matchesFilters;
-    }).sort((a, b) => {
-      switch (sortBy) {
-        case 'rating':
-          return b.rating - a.rating;
-        case 'connections':
-          return b.connectionCount - a.connectionCount;
-        case 'newest':
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        default:
-          return (b.relevanceScore || 0) - (a.relevanceScore || 0);
-      }
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    setFilters({
+      ...filters,
+      specialty: form.specialty.value,
+      // Add location or other filters as needed
     });
-  }, [businesses, searchQuery, selectedCategory, selectedLocation, activeFilters, sortBy]);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header Section */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-gray-900">Find Your Perfect Fit</h1>
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setView(view === 'grid' ? 'list' : 'grid')}
-                className="p-2 rounded-md hover:bg-gray-100"
-              >
-                {view === 'grid' ? 'List View' : 'Grid View'}
-              </button>
-              <button
-                onClick={() => setShowMap(!showMap)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-              >
-                {showMap ? 'Hide Map' : 'Show Map'}
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* AI Search Section */}
-        <section className="mb-8">
-          <AISearch />
-        </section>
-
-        {/* Enhanced Filters */}
-        <section className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Search and Categories (existing) */}
-            <div className="space-y-4">
-              <h3 className="font-medium text-gray-900">Sort By</h3>
-              <div className="flex flex-wrap gap-2">
-                {sortOptions.map(option => (
-                  <button
-                    key={option.value}
-                    onClick={() => setSortBy(option.value)}
-                    className={`px-3 py-1.5 rounded-full text-sm ${
-                      sortBy === option.value
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Active Filters */}
-            <div className="space-y-4">
-              <h3 className="font-medium text-gray-900">Active Filters</h3>
-              <div className="flex flex-wrap gap-2">
-                {activeFilters.map(filter => (
-                  <span
-                    key={filter}
-                    className="inline-flex items-center px-3 py-1.5 rounded-full text-sm bg-blue-100 text-blue-800"
-                  >
-                    {filter}
-                    <button
-                      onClick={() => setActiveFilters(filters => filters.filter(f => f !== filter))}
-                      className="ml-2 text-blue-600 hover:text-blue-800"
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
-                {activeFilters.length === 0 && (
-                  <span className="text-sm text-gray-500">No active filters</span>
-                )}
-              </div>
-            </div>
-
-            {/* Quick Stats */}
-            <div className="col-span-2 grid grid-cols-3 gap-4">
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-2xl font-bold text-blue-600">{filteredBusinesses.length}</div>
-                <div className="text-sm text-gray-600">Matching Results</div>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-2xl font-bold text-green-600">
-                  {filteredBusinesses.filter(b => b.verified).length}
-                </div>
-                <div className="text-sm text-gray-600">Verified Businesses</div>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-2xl font-bold text-purple-600">
-                  {Array.from(new Set(filteredBusinesses.map(b => b.location))).length}
-                </div>
-                <div className="text-sm text-gray-600">Locations</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Map and Content Layout */}
-        <div className="flex gap-8">
-          {/* Left Column - Map and Ads */}
-          {showMap && (
-            <div className="w-1/2 sticky top-8 h-[calc(100vh-8rem)]">
-              <div className="bg-white rounded-lg shadow-sm p-4 mb-4">
-                <BusinessMap
-                  businesses={businesses}
-                  selectedBusinessId={selectedBusinessId}
-                  onSelectBusiness={setSelectedBusinessId}
-                />
-              </div>
-              <div className="space-y-4">
-                <AdBanner
-                  title="Premium Business Listing"
-                  description="Stand out from the competition"
-                  ctaText="Upgrade Now"
-                  ctaLink="/upgrade"
-                  imageSrc="/images/premium-banner.jpg"
-                />
-                <TrendingProducts />
-                <BusinessInsights />
-              </div>
-            </div>
-          )}
-
-          {/* Right Column - Business Listings */}
-          <div className={showMap ? 'w-1/2' : 'w-full'}>
-            {/* Advanced Filters */}
-            <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-              <div className="grid grid-cols-2 gap-4">
-                <select
-                  className="form-select"
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                >
-                  <option value="All">All Categories</option>
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
-                <select
-                  className="form-select"
-                  value={selectedLocation}
-                  onChange={(e) => setSelectedLocation(e.target.value)}
-                >
-                  <option value="All">All Locations</option>
-                  {locations.map((loc) => (
-                    <option key={loc} value={loc}>{loc}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Business Listings */}
-            <div className={`grid gap-6 ${view === 'grid' ? 'grid-cols-2' : 'grid-cols-1'}`}>
-              {filteredBusinesses.map((business) => (
-                <BusinessCard
-                  key={business.id}
-                  business={business}
-                  view={view}
-                  isSelected={business.id === selectedBusinessId}
-                  onSelect={() => setSelectedBusinessId(business.id)}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </main>
+    <div className="flex flex-col md:flex-row gap-6">
+      <div>
+        <DirectoryFilters filters={filters} setFilters={setFilters} />
+      </div>
+      <div className="flex-1">
+        <DirectorySearchBar onSearch={handleSearch} />
+        {loading ? (
+          <div>Loading professionals...</div>
+        ) : (
+          <DirectoryResultsList professionals={professionals} />
+        )}
+      </div>
     </div>
   );
 }
