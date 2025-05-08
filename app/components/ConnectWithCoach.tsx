@@ -4,6 +4,7 @@ import { FaWhatsapp, FaCheck } from 'react-icons/fa';
 import { BsChatDotsFill } from 'react-icons/bs';
 import Image from 'next/image';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import CoachProfileModal from './CoachProfileModal';
 
 interface Coach {
   id: string;
@@ -67,6 +68,8 @@ export default function ConnectWithCoach({ onSubmit, onClose }: ConnectWithCoach
     motivation: '',
     selectedCoach: null as Coach | null,
   });
+  const [selectedCoach, setSelectedCoach] = useState<Coach | null>(null);
+  const [submittedCoachIds, setSubmittedCoachIds] = useState<string[]>([]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,6 +90,10 @@ export default function ConnectWithCoach({ onSubmit, onClose }: ConnectWithCoach
   const startLiveChat = (coach: Coach) => {
     console.log('Starting live chat with', coach.name);
     alert(`Live chat with ${coach.name} will be available soon!`);
+  };
+
+  const submitEnquiry = (coach: Coach) => {
+    setSubmittedCoachIds((prev) => [...prev, coach.id]);
   };
 
   return (
@@ -327,66 +334,50 @@ export default function ConnectWithCoach({ onSubmit, onClose }: ConnectWithCoach
             </div>
           </form>
         ) : (
-          <div className="p-6">
+          <div className="p-6 space-y-4">
+            <div className="mb-4 text-center text-lg text-white/80 font-semibold">Select a coach to view more details or connect:</div>
             <div className="space-y-4">
               {coaches.map((coach) => (
                 <div
                   key={coach.id}
-                  className="bg-gray-800 rounded-lg p-4 hover:bg-gray-750 transition-colors border border-gray-700 hover:border-[#4AC1E0]/50"
+                  className="bg-[#232B34] rounded-lg p-4 flex items-center justify-between gap-4 cursor-pointer hover:bg-[#2A3542] transition"
+                  onClick={() => setSelectedCoach(coach)}
                 >
-                  <div className="flex items-center space-x-4">
-                    <div className="flex-shrink-0 h-16 w-16 rounded-full overflow-hidden bg-gray-700 relative">
-                      <div className="absolute inset-0 flex items-center justify-center bg-gray-800 text-[#4AC1E0] text-2xl font-bold">
-                        {coach.name.charAt(0)}
-                      </div>
-                      <Image
-                        src={coach.image}
-                        alt={coach.name}
-                        fill
-                        className="object-cover"
-                        sizes="64px"
-                        onError={(e: any) => {
-                          e.target.src = '';
-                          e.target.parentElement.firstChild.style.display = 'flex';
-                        }}
-                      />
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-[#4AC1E0] flex items-center justify-center text-xl font-bold text-white overflow-hidden">
+                      {coach.image ? (
+                        <img src={coach.image} alt={coach.name} className="w-12 h-12 object-cover rounded-full" />
+                      ) : (
+                        coach.name.split(' ').map((n) => n[0]).join('')
+                      )}
                     </div>
-                    <div className="flex-1">
-                      <h4 className="text-lg font-medium text-white">{coach.name}</h4>
-                      <p className="text-[#4AC1E0]">{coach.specialty}</p>
-                      <p className="text-gray-400 text-sm">{coach.experience} experience</p>
-                      <div className="flex items-center mt-1">
-                        <span className="text-[#4AC1E0]">★</span>
-                        <span className="ml-1 text-gray-300 text-sm">{coach.rating}</span>
-                        <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-medium bg-green-400/10 text-green-400">
-                          {coach.availability}
-                        </span>
+                    <div>
+                      <div className="font-bold text-white text-lg">{coach.name}</div>
+                      <div className="text-[#4AC1E0] text-sm">{coach.specialty}</div>
+                      <div className="text-gray-400 text-xs">{coach.experience} experience</div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-yellow-400">★</span>
+                        <span className="text-white text-sm">{coach.rating}</span>
+                        <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-medium ${coach.availability.includes('Now') ? 'bg-green-400/10 text-green-400' : 'bg-yellow-400/10 text-yellow-400'}`}>{coach.availability}</span>
                       </div>
                     </div>
-                    <div className="flex flex-col space-y-2">
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    {submittedCoachIds.includes(coach.id) ? (
+                      <span className="text-green-400 font-semibold">Enquiry sent!</span>
+                    ) : (
                       <button
-                        type="button"
-                        onClick={() => connectViaWhatsApp(coach)}
-                        className="inline-flex items-center px-3 py-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm"
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded font-semibold text-sm transition"
+                        onClick={e => { e.stopPropagation(); submitEnquiry(coach); }}
                       >
-                        <FaWhatsapp className="mr-1.5 text-base" />
-                        WhatsApp
+                        Submit Enquiry
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => startLiveChat(coach)}
-                        className="inline-flex items-center px-3 py-1.5 bg-[#4AC1E0] text-white rounded-lg hover:bg-[#4AC1E0]/90 transition-colors text-sm"
-                      >
-                        <BsChatDotsFill className="mr-1.5" />
-                        Live Chat
-                      </button>
-                    </div>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
-
-            <div className="flex justify-end space-x-4 mt-6">
+            <div className="flex justify-end gap-4 mt-6">
               <button
                 type="button"
                 onClick={() => setStep(2)}
@@ -397,11 +388,14 @@ export default function ConnectWithCoach({ onSubmit, onClose }: ConnectWithCoach
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-gray-300 hover:text-white transition-colors"
+                className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
               >
                 Close
               </button>
             </div>
+            {selectedCoach && (
+              <CoachProfileModal coach={selectedCoach} onClose={() => setSelectedCoach(null)} />
+            )}
           </div>
         )}
       </motion.div>

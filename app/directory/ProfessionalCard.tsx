@@ -11,8 +11,16 @@ function getRandomStockImage() {
   return stockImages[Math.floor(Math.random() * stockImages.length)];
 }
 
-export default function ProfessionalCard({ professional, mode = 'large' }) {
+export default function ProfessionalCard({ professional, mode = 'large', matchScore }: { professional: any, mode?: string, matchScore?: number }) {
   const imageUrl = professional.profileImage || getRandomStockImage();
+
+  // Match badge
+  const matchBadge =
+    typeof matchScore === 'number' ? (
+      <span className="absolute top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white text-xs px-3 py-1 rounded-full font-semibold shadow z-10">
+        Match: {matchScore}%
+      </span>
+    ) : null;
 
   if (mode === 'list') {
     // List mode: horizontal card
@@ -20,6 +28,7 @@ export default function ProfessionalCard({ professional, mode = 'large' }) {
       <div className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-row h-40 transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl hover:border-blue-400 border border-transparent group">
         <div className="relative aspect-[3/2] h-full w-40 flex-shrink-0 bg-gray-100">
           <img src={imageUrl} alt={professional.fullName} className="object-cover w-full h-full" />
+          {matchBadge}
           {professional.modalities?.includes('online') && (
             <span className="absolute top-3 left-3 bg-blue-500 text-white text-xs px-3 py-1 rounded-full font-semibold shadow">Online</span>
           )}
@@ -46,6 +55,7 @@ export default function ProfessionalCard({ professional, mode = 'large' }) {
       <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-full transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl hover:border-blue-400 border border-transparent group p-2">
         <div className="relative aspect-[3/2] w-full bg-gray-100">
           <img src={imageUrl} alt={professional.fullName} className="object-cover w-full h-full" />
+          {matchBadge}
           {professional.modalities?.includes('online') && (
             <span className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full font-semibold shadow">Online</span>
           )}
@@ -76,6 +86,7 @@ export default function ProfessionalCard({ professional, mode = 'large' }) {
           alt={professional.fullName}
           className="object-cover w-full h-full"
         />
+        {matchBadge}
         {professional.modalities?.includes('online') && (
           <span className="absolute top-3 left-3 bg-blue-500 text-white text-xs px-3 py-1 rounded-full font-semibold shadow">
             Online

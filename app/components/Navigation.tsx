@@ -19,162 +19,137 @@ export default function Navigation() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-black/95 backdrop-blur-sm z-50 border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
-            <Image
-              src="/images/logo.png"
-              alt="Quarter Turn"
-              width={150}
-              height={40}
-              priority
-            />
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-gray-300 hover:text-yellow-400 transition-colors">
-              Home
-            </Link>
-            <Link href="/services" className="text-gray-300 hover:text-yellow-400 transition-colors">
-              Services
-            </Link>
-            <Link href="/products" className="text-gray-300 hover:text-yellow-400 transition-colors">
-              Products
-            </Link>
-            <Link
-              href="/find-a-coach"
-              className="bg-yellow-400 text-black px-4 py-2 rounded-lg font-bold shadow hover:bg-yellow-300 transition-colors border-2 border-yellow-500 animate-pulse"
-            >
-              Online Coach
-            </Link>
-            <Link href="/about" className="text-gray-300 hover:text-yellow-400 transition-colors">
-              About
-            </Link>
-            <Link href="/contact" className="text-gray-300 hover:text-yellow-400 transition-colors">
-              Contact
-            </Link>
-          </div>
-
-          <div className="hidden md:flex items-center space-x-6">
-            {/* Personal AI Shopper Button */}
-            <Link
-              href="/personal-shopper"
-              className="bg-[#4AC1E0] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#4AC1E0]/90 transition-colors flex items-center space-x-2"
-            >
-              <HiMagnifyingGlass className="h-5 w-5" />
-              <span>Personal AI Shopper</span>
+    <>
+      <nav className="fixed top-0 left-0 right-0 bg-black/95 backdrop-blur-sm z-50 border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <Link href="/" className="flex-shrink-0">
+              <Image
+                src="/images/logo.png"
+                alt="Quarter Turn"
+                width={150}
+                height={40}
+                priority
+              />
             </Link>
 
-            {/* Connect with Coach Button */}
-            <button
-              onClick={() => setIsCoachModalOpen(true)}
-              className="bg-[#4AC1E0] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#4AC1E0]/90 transition-colors flex items-center space-x-2"
-            >
-              <UserIcon className="h-5 w-5" />
-              <span>Connect with Coach</span>
-            </button>
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+              {/* Logo is already the Home link */}
+              <Link href="/products" className="text-gray-300 hover:text-yellow-400 transition-colors">
+                Products
+              </Link>
+              <Link href="/services" className="text-gray-300 hover:text-yellow-400 transition-colors">
+                Services
+              </Link>
+              <Link
+                href="/find-a-coach"
+                className="bg-yellow-400 text-black px-5 py-2 rounded-lg font-bold shadow hover:bg-yellow-300 transition-colors border-2 border-yellow-500 animate-pulse text-lg"
+              >
+                Find a Coach
+              </Link>
+            </div>
 
-            {/* Right side icons */}
-            <button className="text-gray-300 hover:text-[#4AC1E0] transition-colors">
-              <HiShoppingCart className="h-5 w-5" />
-            </button>
-            <button className="text-gray-300 hover:text-[#4AC1E0] transition-colors">
-              <HiUser className="h-5 w-5" />
-            </button>
-          </div>
+            <div className="hidden md:flex items-center space-x-6">
+              {/* Personal AI Shopper Button */}
+              <Link
+                href="/personal-shopper"
+                className="bg-gradient-to-r from-[#4AC1E0] to-blue-400 text-white px-5 py-2 rounded-xl font-semibold shadow-lg hover:from-blue-400 hover:to-[#4AC1E0] transition-colors flex items-center space-x-2 text-base border-2 border-[#4AC1E0]"
+              >
+                <HiMagnifyingGlass className="h-5 w-5" />
+                <span>Personal AI Shopper</span>
+              </Link>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-gray-300 hover:text-yellow-400 transition-colors"
-            >
-              {isMobileMenuOpen ? (
-                <HiXMark className="h-6 w-6" />
-              ) : (
-                <HiBars3 className="h-6 w-6" />
-              )}
-            </button>
+              {/* Connect with Coach Button */}
+              <button
+                onClick={() => setIsCoachModalOpen(true)}
+                className="bg-gradient-to-r from-[#4AC1E0] to-blue-400 text-white px-5 py-2 rounded-xl font-semibold shadow-lg hover:from-blue-400 hover:to-[#4AC1E0] transition-colors flex items-center space-x-2 text-base border-2 border-[#4AC1E0]"
+              >
+                <UserIcon className="h-5 w-5" />
+                <span>Connect with Coach</span>
+              </button>
+
+              {/* Right side icons */}
+              <button className="text-gray-300 hover:text-[#4AC1E0] transition-colors">
+                <HiShoppingCart className="h-5 w-5" />
+              </button>
+              <button className="text-gray-300 hover:text-[#4AC1E0] transition-colors">
+                <HiUser className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-gray-300 hover:text-yellow-400 transition-colors"
+              >
+                {isMobileMenuOpen ? (
+                  <HiXMark className="h-6 w-6" />
+                ) : (
+                  <HiBars3 className="h-6 w-6" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Mobile menu */}
-      {isMobileMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="md:hidden bg-black/95"
-        >
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link
-              href="/"
-              className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
-            >
-              Home
-            </Link>
-            <Link
-              href="/services"
-              className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
-            >
-              Services
-            </Link>
-            <Link
-              href="/products"
-              className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
-            >
-              Products
-            </Link>
-            <Link
-              href="/find-a-coach"
-              className="block w-full px-3 py-2 mt-2 text-center bg-yellow-400 text-black rounded-lg font-bold shadow hover:bg-yellow-300 transition-colors border-2 border-yellow-500 animate-pulse"
-            >
-              Online Coach
-            </Link>
-            <Link
-              href="/about"
-              className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
-            >
-              About
-            </Link>
-            <Link
-              href="/contact"
-              className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
-            >
-              Contact
-            </Link>
-            {/* Personal AI Shopper Button in mobile menu */}
-            <Link
-              href="/personal-shopper"
-              className="block w-full px-3 py-2 mt-2 text-center bg-[#4AC1E0] text-white rounded-lg font-medium hover:bg-[#4AC1E0]/90 transition-colors flex items-center justify-center gap-2"
-            >
-              <HiMagnifyingGlass className="h-5 w-5" />
-              <span>Personal AI Shopper</span>
-            </Link>
-            
-            {/* Connect with Coach Button in mobile menu */}
-            <button
-              onClick={() => setIsCoachModalOpen(true)}
-              className="block w-full px-3 py-2 mt-2 text-center bg-[#4AC1E0] text-white rounded-lg font-medium hover:bg-[#4AC1E0]/90 transition-colors flex items-center justify-center gap-2"
-            >
-              <UserIcon className="h-5 w-5" />
-              <span>Connect with Coach</span>
-            </button>
-          </div>
-        </motion.div>
-      )}
-
-      {/* Coach Connection Modal */}
+        {/* Mobile menu */}
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="md:hidden bg-black/95"
+          >
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              {/* Logo is already the Home link */}
+              <Link
+                href="/products"
+                className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
+              >
+                Products
+              </Link>
+              <Link
+                href="/services"
+                className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
+              >
+                Services
+              </Link>
+              <Link
+                href="/find-a-coach"
+                className="block w-full px-3 py-2 mt-2 text-center bg-yellow-400 text-black rounded-lg font-bold shadow hover:bg-yellow-300 transition-colors border-2 border-yellow-500 animate-pulse text-lg"
+              >
+                Find a Coach
+              </Link>
+              {/* Personal AI Shopper Button in mobile menu */}
+              <Link
+                href="/personal-shopper"
+                className="block w-full px-3 py-2 mt-2 text-center bg-gradient-to-r from-[#4AC1E0] to-blue-400 text-white rounded-xl font-semibold shadow-lg hover:from-blue-400 hover:to-[#4AC1E0] transition-colors flex items-center justify-center gap-2 text-base border-2 border-[#4AC1E0]"
+              >
+                <HiMagnifyingGlass className="h-5 w-5" />
+                <span>Personal AI Shopper</span>
+              </Link>
+              {/* Connect with Coach Button in mobile menu */}
+              <button
+                onClick={() => setIsCoachModalOpen(true)}
+                className="block w-full px-3 py-2 mt-2 text-center bg-gradient-to-r from-[#4AC1E0] to-blue-400 text-white rounded-xl font-semibold shadow-lg hover:from-blue-400 hover:to-[#4AC1E0] transition-colors flex items-center justify-center gap-2 text-base border-2 border-[#4AC1E0]"
+              >
+                <UserIcon className="h-5 w-5" />
+                <span>Connect with Coach</span>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </nav>
+      {/* Coach Connection Modal (rendered outside nav for proper overlay) */}
       {isCoachModalOpen && (
         <ConnectWithCoach
           onSubmit={handleCoachConnect}
           onClose={() => setIsCoachModalOpen(false)}
         />
       )}
-    </nav>
+    </>
   );
 } 
