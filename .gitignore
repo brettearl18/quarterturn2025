@@ -83,3 +83,6 @@ web_modules/
 .dynamodb/
 .tern-port
 .vercel
+
+# Firebase service account key
+serviceAccountKey.json
