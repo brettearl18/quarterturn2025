@@ -7,17 +7,17 @@ import FeaturedServices from './components/FeaturedServices';
 import TopSelectedProducts from './components/TopSelectedProducts';
 import BusinessInsights from './components/BusinessInsights';
 import NewsTickerBanner from './components/NewsTickerBanner';
-import FirebaseTest from './components/FirebaseTest';
+import FeaturedCoaches from './components/FeaturedCoaches';
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
-      <NewsTickerBanner />
-      <main>
+    <>
+      <main className="min-h-screen bg-gray-50 pt-20">
+        <NewsTickerBanner />
         <Hero />
+        <FeaturedCoaches />
         <div className="space-y-24 py-24">
           <div className="max-w-7xl mx-auto px-4 md:px-8">
-            <FirebaseTest />
             <FlashSale />
           </div>
           
@@ -41,17 +41,11 @@ export default function Home() {
             <FeaturedServices />
           </div>
 
-          <div className="bg-gray-50 py-24">
-            <div className="max-w-7xl mx-auto px-4 md:px-8">
-              <TopSelectedProducts />
-            </div>
-          </div>
-
           <div className="max-w-7xl mx-auto px-4 md:px-8">
             <BusinessInsights />
           </div>
         </div>
       </main>
-    </div>
+    </>
   );
 } 

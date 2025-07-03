@@ -43,6 +43,8 @@ const mockCoaches: any[] = Array.from({ length: 18 }).map((_, i) => ({
   featured: i % 7 === 0,
 }));
 
+const useMockData = process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true';
+
 export default function FindACoachPage() {
   const [professionals, setProfessionals] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -67,7 +69,7 @@ export default function FindACoachPage() {
       setLoading(true);
       const q = query(collection(db, "professionals"), where("modalities", "array-contains", "online"));
       const snapshot = await getDocs(q);
-      const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data(), isMock: false }));
       setProfessionals(data);
       setLoading(false);
     }
@@ -87,12 +89,16 @@ export default function FindACoachPage() {
     return Array.from(set).sort();
   }, [professionals]);
 
-  // Always show mockCoaches merged with real professionals
-  const allProfessionals = [...professionals, ...mockCoaches];
-  // Deduplicate by id
-  const uniqueProfessionals = Array.from(new Map(allProfessionals.map(pro => [pro.id, pro])).values());
+  // Merge mock and live data if toggle is on
+  let allProfessionals = professionals;
+  if (useMockData) {
+    allProfessionals = [...professionals, ...mockCoaches.map((c) => ({ ...c, isMock: true }))];
+    // Deduplicate by id
+    allProfessionals = Array.from(new Map(allProfessionals.map(pro => [pro.id, pro])).values());
+  }
+
   const filteredProfessionals = useMemo(() => {
-    let filtered = uniqueProfessionals;
+    let filtered = allProfessionals;
     if (search.trim()) {
       const s = search.trim().toLowerCase();
       filtered = filtered.filter(
@@ -119,7 +125,7 @@ export default function FindACoachPage() {
       });
     }
     return filtered;
-  }, [uniqueProfessionals, search, sort, selectedSpecialties, minRating]);
+  }, [allProfessionals, search, sort, selectedSpecialties, minRating]);
 
   // Handlers
   const handleSpecialtyChange = (spec: string) => {
@@ -300,7 +306,10 @@ export default function FindACoachPage() {
             ) : (
               <div className={gridClass}>
                 {professionalsToShow.map((pro) => (
-                  <ProfessionalCard key={pro.id} professional={pro} mode={cardMode} matchScore={pro.score} />
+                  <div key={pro.id} className="flex items-center">
+                    <ProfessionalCard professional={pro} mode={cardMode} matchScore={pro.score} />
+                    {pro.isMock && <span className="ml-2 px-2 py-1 bg-yellow-200 text-yellow-800 rounded text-xs font-bold">Demo</span>}
+                  </div>
                 ))}
               </div>
             )}

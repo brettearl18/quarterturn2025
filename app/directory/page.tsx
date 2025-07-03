@@ -213,15 +213,15 @@ export default function DirectoryPage() {
     <div className="flex flex-col md:flex-row gap-6">
       <div>
         <DirectoryFilters filters={filters} setFilters={setFilters} />
-      </div>
+            </div>
       <div className="flex-1">
         <DirectorySearchBar onSearch={handleSearch} />
         {loading ? (
           <div>Loading professionals...</div>
         ) : (
           <DirectoryResultsList professionals={professionals} />
-        )}
-      </div>
+                )}
+              </div>
     </div>
   );
 }

@@ -10,29 +10,44 @@ service firebase.storage {
       return request.auth != null;
     }
     
-    function isVendor() {
-      return isAuthenticated() && 
-        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'vendor';
+    function isValidImage() {
+      return request.resource.contentType.matches('image/.*')
+        && request.resource.size < 5 * 1024 * 1024; // 5MB max
+    }
+    
+    function isProfileImage() {
+      return request.resource.contentType.matches('image/.*')
+        && request.resource.size < 2 * 1024 * 1024; // 2MB max for profile images
     }
 
-    // Product images
-    match /products/{productId}/{imageFile} {
-      allow read: if true;
-      allow create: if isVendor();
-      allow update, delete: if isVendor() &&
-        firestore.get(/databases/(default)/documents/products/$(productId)).data.vendorId == request.auth.uid;
+    // Profile images
+    match /profileImages/{userId}/{fileName} {
+      allow read: if true; // Public read access for profile images
+      allow write: if isAuthenticated() 
+        && request.auth.uid == userId 
+        && isProfileImage();
     }
 
-    // User profile images
-    match /users/{userId}/{imageFile} {
-      allow read: if true;
-      allow write: if isAuthenticated() && request.auth.uid == userId;
+    // Gallery images
+    match /galleryImages/{userId}/{fileName} {
+      allow read: if true; // Public read access for gallery images
+      allow write: if isAuthenticated() 
+        && request.auth.uid == userId 
+        && isValidImage();
     }
 
-    // Vendor profile images
-    match /vendors/{vendorId}/{imageFile} {
-      allow read: if true;
-      allow write: if isAuthenticated() && request.auth.uid == vendorId;
+    // Credential documents
+    match /credentials/{userId}/{fileName} {
+      allow read: if isAuthenticated() 
+        && (request.auth.uid == userId || request.auth.token.isAdmin == true);
+      allow write: if isAuthenticated() 
+        && request.auth.uid == userId 
+        && request.resource.size < 10 * 1024 * 1024; // 10MB max for documents
+    }
+
+    // Default deny
+    match /{allPaths=**} {
+      allow read, write: if false;
     }
   }
 }

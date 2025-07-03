@@ -9,6 +9,8 @@
 - **Display Preferences:** User can toggle between large grid, small grid, and list view (preference saved).
 - **Navigation:** Highlighted links to directory, hero CTA, and navigation bar.
 - **Firestore Integration:** Real professionals loaded and merged with mock data.
+- **Connect with Coach Flow:** Multi-step onboarding, coach selection, quick view modal, and submit enquiry (lead logging) ✅
+- **AI Coach Finder:** Users describe their needs and get AI-powered coach matches with explanation and match % ✅
 
 ## 2. Tech Stack & Main Dependencies
 - **Framework:** Next.js 15.3.2 (App Router)
@@ -23,6 +25,8 @@
 - **Mock data ensures the directory always looks full and professional.**
 - **Sidebar and grid adapt to all screen sizes.**
 - **Consistent 3:2 image tiles for visual polish.**
+- **Multi-step Connect with Coach flow with quick view and lead submission.**
+- **AI-powered coach matching with transparent explanation and match score.**
 
 ## 4. File/Folder Structure & Main Routes
 - `app/find-a-coach/page.tsx` — Main directory page
@@ -68,6 +72,8 @@
 6. **Deployment:** Deploy to Vercel/Firebase, set up custom domain
 7. **Analytics:** Add Google Analytics or similar
 8. **Error Monitoring:** Add Sentry or similar
+9. **Connect with Coach Flow:** Multi-step onboarding, quick view modal, and submit enquiry ✅
+10. **AI Coach Finder:** Natural language matching, match % and explanation ✅
 
 ## 10. Best Practices to Implement Next
 - **Security:** Protect Firestore rules, secure API endpoints

@@ -1,6 +1,6 @@
 'use client';
 
-import { SparklesIcon } from '@heroicons/react/24/outline';
+import { SparklesIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 export default function Hero() {
@@ -50,6 +50,20 @@ export default function Hero() {
                 >
                   Online Directory
                 </Link>
+                <Link
+                  href="/find-a-gym"
+                  className="bg-yellow-400 text-black px-8 py-4 rounded-full font-bold shadow hover:bg-yellow-300 transition-colors border-2 border-yellow-500"
+                >
+                  Find a Gym
+                </Link>
+                <Link
+                  href="https://www.figma.com/file/coach-profile-v2-quarter-turn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold hover:bg-white/20 transition-colors border border-white/20"
+                >
+                  View Wireframe
+                </Link>
               </div>
             </div>
 
@@ -71,6 +85,22 @@ export default function Hero() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* CTA Banner: Sign up as a Coach */}
+      <div className="w-full bg-gradient-to-r from-yellow-400 to-yellow-300 py-8 flex justify-center items-center shadow-lg">
+        <div className="flex flex-col md:flex-row items-center gap-6">
+          <div className="text-2xl md:text-3xl font-bold text-gray-900 text-center md:text-left">
+            Are you a health or fitness professional?
+          </div>
+          <a
+            href="/auth/signup/coach"
+            className="flex items-center gap-2 bg-black text-yellow-300 px-8 py-4 rounded-full font-bold text-lg shadow hover:bg-gray-900 transition-colors border-2 border-yellow-500 mt-4 md:mt-0"
+          >
+            Sign up as a Coach
+            <ArrowRightIcon className="h-6 w-6" />
+          </a>
         </div>
       </div>
     </div>
